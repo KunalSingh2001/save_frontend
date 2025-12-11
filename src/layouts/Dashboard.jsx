@@ -5,16 +5,13 @@ function Dashboard() {
                 <h3 className="page-title">
                     <span className="page-title-icon bg-gradient-primary text-white me-2">
                         <i className="mdi mdi-home"></i>
-                    </span>{" "}
+                    </span>
                     Dashboard
                 </h3>
                 <nav aria-label="breadcrumb">
                     <ul className="breadcrumb">
-                        <li
-                            className="breadcrumb-item active"
-                            aria-current="page"
-                        >
-                            <span></span>Overview{" "}
+                        <li className="breadcrumb-item active" aria-current="page">
+                            Overview
                             <i className="mdi mdi-alert-circle-outline icon-sm text-primary align-middle"></i>
                         </li>
                     </ul>
@@ -30,7 +27,7 @@ function Dashboard() {
                                 alt="circle-image"
                             />
                             <h4 className="font-weight-normal mb-3">
-                                Weekly Sales{" "}
+                                Weekly Sales
                                 <i className="mdi mdi-chart-line mdi-24px float-end"></i>
                             </h4>
                             <h2 className="mb-5">$ 15,0000</h2>
@@ -47,7 +44,7 @@ function Dashboard() {
                                 alt="circle-image"
                             />
                             <h4 className="font-weight-normal mb-3">
-                                Weekly Orders{" "}
+                                Weekly Orders
                                 <i className="mdi mdi-bookmark-outline mdi-24px float-end"></i>
                             </h4>
                             <h2 className="mb-5">45,6334</h2>
@@ -64,7 +61,7 @@ function Dashboard() {
                                 alt="circle-image"
                             />
                             <h4 className="font-weight-normal mb-3">
-                                Visitors Online{" "}
+                                Visitors Online
                                 <i className="mdi mdi-diamond mdi-24px float-end"></i>
                             </h4>
                             <h2 className="mb-5">95,5741</h2>
@@ -86,10 +83,7 @@ function Dashboard() {
                                     className="rounded-legend legend-horizontal legend-top-right float-end"
                                 ></div>
                             </div>
-                            <canvas
-                                id="visit-sale-chart"
-                                className="mt-4"
-                            ></canvas>
+                            <canvas id="visit-sale-chart" className="mt-4"></canvas>
                         </div>
                     </div>
                 </div>
@@ -117,11 +111,11 @@ function Dashboard() {
                                 <table className="table">
                                     <thead>
                                         <tr>
-                                            <th> Assignee </th>
-                                            <th> Subject </th>
-                                            <th> Status </th>
-                                            <th> Last Update </th>
-                                            <th> Tracking ID </th>
+                                            <th>Assignee</th>
+                                            <th>Subject</th>
+                                            <th>Status</th>
+                                            <th>Last Update</th>
+                                            <th>Tracking ID</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -130,72 +124,72 @@ function Dashboard() {
                                                 <img
                                                     src="assets/images/faces/face1.jpg"
                                                     className="me-2"
-                                                    alt="image"
-                                                />{" "}
+                                                    alt="David Grey"
+                                                />
                                                 David Grey
                                             </td>
-                                            <td> Fund is not recieved </td>
+                                            <td>Fund is not received</td>
                                             <td>
                                                 <label className="badge badge-gradient-success">
                                                     DONE
                                                 </label>
                                             </td>
-                                            <td> Dec 5, 2017 </td>
-                                            <td> WD-12345 </td>
+                                            <td>Dec 5, 2017</td>
+                                            <td>WD-12345</td>
                                         </tr>
                                         <tr>
                                             <td>
                                                 <img
                                                     src="assets/images/faces/face2.jpg"
                                                     className="me-2"
-                                                    alt="image"
-                                                />{" "}
+                                                    alt="Stella Johnson"
+                                                />
                                                 Stella Johnson
                                             </td>
-                                            <td> High loading time </td>
+                                            <td>High loading time</td>
                                             <td>
                                                 <label className="badge badge-gradient-warning">
                                                     PROGRESS
                                                 </label>
                                             </td>
-                                            <td> Dec 12, 2017 </td>
-                                            <td> WD-12346 </td>
+                                            <td>Dec 12, 2017</td>
+                                            <td>WD-12346</td>
                                         </tr>
                                         <tr>
                                             <td>
                                                 <img
                                                     src="assets/images/faces/face3.jpg"
                                                     className="me-2"
-                                                    alt="image"
-                                                />{" "}
+                                                    alt="Marina Michel"
+                                                />
                                                 Marina Michel
                                             </td>
-                                            <td> Website down for one week </td>
+                                            <td>Website down for one week</td>
                                             <td>
                                                 <label className="badge badge-gradient-info">
                                                     ON HOLD
                                                 </label>
                                             </td>
-                                            <td> Dec 16, 2017 </td>
-                                            <td> WD-12347 </td>
+                                            <td>Dec 16, 2017</td>
+                                            <td>WD-12347</td>
                                         </tr>
                                         <tr>
                                             <td>
                                                 <img
                                                     src="assets/images/faces/face4.jpg"
                                                     className="me-2"
-                                                    alt="image"
-                                                />{" "}
+                                                    alt="John Doe"
+                                                />
                                                 John Doe
                                             </td>
-                                            <td> Loosing control on server </td>
+                                            <td>Loosing control on server</td>
                                             <td>
                                                 <label className="badge badge-gradient-danger">
                                                     REJECTED
                                                 </label>
                                             </td>
-                                            <td> Dec 3, 2017 </td>
-                                            <td> WD-12348 </td>
+                                            <td>Dec 3, 2017</td>
+                                            <td>WD-12348</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -207,3 +201,5 @@ function Dashboard() {
         </div>
     );
 }
+
+export default Dashboard;
