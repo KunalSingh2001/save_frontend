@@ -1,8 +1,10 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout";
+import BeforeLoginLayout from "./layouts/BeforeLoginLayout";
 import Dashboard from "./layouts/Dashboard";
 import PrivateRoute from "./middlewares/PrivateRoute";
 import PublicRoutes from "./middlewares/PublicRoutes";
+import Login from "./components/Login";
 
 function App() {
     console.log("App component rendered");
@@ -23,14 +25,13 @@ function App() {
                 <Route
                     path="/login"
                     element={
-                        <MainLayout>
+                        <BeforeLoginLayout>
                             <PublicRoutes>
-                                <h2>Login Page</h2>
+                                <Login />
                             </PublicRoutes>
-                        </MainLayout>
+                        </BeforeLoginLayout>
                     }
                 />
-                <MainLayout />
             </Routes>
         </BrowserRouter>
     );

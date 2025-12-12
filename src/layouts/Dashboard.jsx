@@ -10,7 +10,10 @@ function Dashboard() {
                 </h3>
                 <nav aria-label="breadcrumb">
                     <ul className="breadcrumb">
-                        <li className="breadcrumb-item active" aria-current="page">
+                        <li
+                            className="breadcrumb-item active"
+                            aria-current="page"
+                        >
                             Overview
                             <i className="mdi mdi-alert-circle-outline icon-sm text-primary align-middle"></i>
                         </li>
@@ -83,7 +86,10 @@ function Dashboard() {
                                     className="rounded-legend legend-horizontal legend-top-right float-end"
                                 ></div>
                             </div>
-                            <canvas id="visit-sale-chart" className="mt-4"></canvas>
+                            <canvas
+                                id="visit-sale-chart"
+                                className="mt-4"
+                            ></canvas>
                         </div>
                     </div>
                 </div>

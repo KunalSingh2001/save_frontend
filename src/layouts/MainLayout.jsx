@@ -4,6 +4,7 @@ import Sidebar from "./Sidebar";
 import Footer from "./Footer";
 
 function MainLayout({ children }) {
+    console.log("MainLayout component rendered");
     return (
         <>
             <div className="container-scroller">
@@ -13,8 +14,8 @@ function MainLayout({ children }) {
                             <div className="ps-lg-3">
                                 <div className="d-flex align-items-center justify-content-between">
                                     <p className="mb-0 font-weight-medium me-3 buy-now-text">
-                                        Free 24/7 customer support, updates,
-                                        and more with this template!
+                                        Free 24/7 customer support, updates, and
+                                        more with this template!
                                     </p>
                                     <a
                                         href="https://www.bootstrapdash.com/product/purple-bootstrap-admin-template/"
@@ -33,7 +34,11 @@ function MainLayout({ children }) {
                                 <button
                                     id="bannerClose"
                                     className="btn border-0 p-0"
-                                    onClick={() => document.getElementById('proBanner').style.display = 'none'}
+                                    onClick={() =>
+                                        (document.getElementById(
+                                            "proBanner"
+                                        ).style.display = "none")
+                                    }
                                 >
                                     <i className="mdi mdi-close text-white mr-0"></i>
                                 </button>
