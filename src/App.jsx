@@ -1,40 +1,21 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import MainLayout from "./layouts/MainLayout";
-import BeforeLoginLayout from "./layouts/BeforeLoginLayout";
-import Dashboard from "./layouts/Dashboard";
-import PrivateRoute from "./middlewares/PrivateRoute";
-import PublicRoutes from "./middlewares/PublicRoutes";
-import Login from "./components/Login";
+import PublicRoutes from "./routes/PublicRoutes";
+import PrivateRoutes from "./routes/PrivateRoutes";
+import NotFound from "./routes/NotFound";
 
 function App() {
-    console.log("App component rendered");
-    return (
-        <BrowserRouter>
-            <Routes>
-                <Route
-                    path="/"
-                    element={
-                        <MainLayout>
-                            <PrivateRoute>
-                                <Dashboard />
-                            </PrivateRoute>
-                        </MainLayout>
-                    }
-                />
+  console.log("App");
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/auth/*" element={<PublicRoutes />} />
 
-                <Route
-                    path="/login"
-                    element={
-                        <BeforeLoginLayout>
-                            <PublicRoutes>
-                                <Login />
-                            </PublicRoutes>
-                        </BeforeLoginLayout>
-                    }
-                />
-            </Routes>
-        </BrowserRouter>
-    );
+        <Route path="/*" element={<PrivateRoutes />} />
+
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
 export default App;

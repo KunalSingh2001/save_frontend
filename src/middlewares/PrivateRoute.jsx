@@ -5,7 +5,7 @@ function PrivateRoute({ children }) {
     const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
     if (!isAuthenticated) {
-        return <Navigate to="/login" replace />;
+        return <Navigate to="/auth/login" replace />;
     } else {
         return children;
     }

@@ -1,23 +1,42 @@
 import React, { useRef } from "react";
+import { useDispatch } from "react-redux";
 import axios from "axios";
+import { successToast, errorToast } from "../utils/tost.js";
+import { parseApiError } from "../utils/parseApiError.js";
+import { loginSuccess } from "../redux/slices/authSlice.js";
+
 function Login() {
     let useremail = useRef();
     let userpassword = useRef();
+    const dispatch = useDispatch();
 
     async function loginSubmitHandler(event) {
         event.preventDefault();
-        const enteredEmail = useremail.current.value;
-        const enteredPassword = userpassword.current.value;
-        const loginData = {
-            username: enteredEmail,
-            password: enteredPassword,
-        };
+        try {
+            const enteredEmail = useremail.current.value;
+            const enteredPassword = userpassword.current.value;
 
-        const res = await axios.post("http://localhost:3000/api/auth/login", {
-            loginData,
-        });
+            const res = await axios.post("http://localhost:2519/api/auth/login", {
+                username: enteredEmail,
+                password: enteredPassword,
+            });
 
-        console.log("After login process", res);
+            dispatch(loginSuccess({
+                isAuthenticated: true,
+                user: res.data.username,
+                token: res.data.access_token,
+            }))
+
+            localStorage.setItem("isAuthenticated", true),
+            localStorage.setItem("user", res.data.username) || false,
+            localStorage.setItem("token", res.data.access_token) || false,
+
+            successToast("Login successful");
+
+        } catch (error) {
+            const message = parseApiError(error);
+            errorToast(message);
+        }
     }
 
     return (

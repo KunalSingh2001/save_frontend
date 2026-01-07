@@ -1,12 +1,15 @@
+import { useDispatch } from "react-redux";
+import { logout } from "../redux/slices/authSlice";
 function Navbar() {
+    const dispatch = useDispatch();
     return (
         <nav className="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
             <div className="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
                 <a className="navbar-brand brand-logo" href="index.html">
-                    <img src="assets/images/logo.svg" alt="logo" />
+                    <img src="/assets/images/logo.svg" alt="logo" />
                 </a>
                 <a className="navbar-brand brand-logo-mini" href="index.html">
-                    <img src="assets/images/logo-mini.svg" alt="logo" />
+                    <img src="/assets/images/logo-mini.svg" alt="logo" />
                 </a>
             </div>
 
@@ -48,7 +51,7 @@ function Navbar() {
                         >
                             <div className="nav-profile-img">
                                 <img
-                                    src="assets/images/faces/face1.jpg"
+                                    src="/assets/images/faces/face1.jpg"
                                     alt="image"
                                 />
                                 <span className="availability-status online"></span>
@@ -69,10 +72,10 @@ function Navbar() {
                                 Activity Log
                             </a>
                             <div className="dropdown-divider"></div>
-                            <a className="dropdown-item" href="#">
+                            <button className="dropdown-item" onClick={() => dispatch(logout())}>
                                 <i className="mdi mdi-logout me-2 text-primary"></i>{" "}
                                 Signout
-                            </a>
+                            </button>
                         </div>
                     </li>
 
@@ -107,7 +110,7 @@ function Navbar() {
                             <a className="dropdown-item preview-item">
                                 <div className="preview-thumbnail">
                                     <img
-                                        src="assets/images/faces/face4.jpg"
+                                        src="/assets/images/faces/face4.jpg"
                                         alt="image"
                                         className="profile-pic"
                                     />
@@ -127,7 +130,7 @@ function Navbar() {
                             <a className="dropdown-item preview-item">
                                 <div className="preview-thumbnail">
                                     <img
-                                        src="assets/images/faces/face2.jpg"
+                                        src="/assets/images/faces/face2.jpg"
                                         alt="image"
                                         className="profile-pic"
                                     />
@@ -147,7 +150,7 @@ function Navbar() {
                             <a className="dropdown-item preview-item">
                                 <div className="preview-thumbnail">
                                     <img
-                                        src="assets/images/faces/face3.jpg"
+                                        src="/assets/images/faces/face3.jpg"
                                         alt="image"
                                         className="profile-pic"
                                     />
@@ -248,9 +251,9 @@ function Navbar() {
                     </li>
 
                     <li className="nav-item nav-logout d-none d-lg-block">
-                        <a className="nav-link" href="#">
+                        <button className="nav-link" onClick="#">
                             <i className="mdi mdi-power"></i>
-                        </a>
+                        </button>
                     </li>
 
                     <li className="nav-item nav-settings d-none d-lg-block">
