@@ -15,24 +15,27 @@ function Login() {
         try {
             const enteredEmail = useremail.current.value;
             const enteredPassword = userpassword.current.value;
+            console.log("entered Credetials", enteredEmail, enteredPassword);
+            const res = await axios.post(
+                "http://localhost:2519/api/auth/login",
+                {
+                    username: enteredEmail,
+                    password: enteredPassword,
+                }
+            );
 
-            const res = await axios.post("http://localhost:2519/api/auth/login", {
-                username: enteredEmail,
-                password: enteredPassword,
-            });
-
-            dispatch(loginSuccess({
-                isAuthenticated: true,
-                user: res.data.username,
-                token: res.data.access_token,
-            }))
+            dispatch(
+                loginSuccess({
+                    isAuthenticated: true,
+                    user: res.data.username,
+                    token: res.data.access_token,
+                })
+            );
 
             localStorage.setItem("isAuthenticated", true),
-            localStorage.setItem("user", res.data.username) || false,
-            localStorage.setItem("token", res.data.access_token) || false,
-
-            successToast("Login successful");
-
+                localStorage.setItem("user", res.data.username) || false,
+                localStorage.setItem("token", res.data.access_token) || false,
+                successToast("Login successful");
         } catch (error) {
             const message = parseApiError(error);
             errorToast(message);

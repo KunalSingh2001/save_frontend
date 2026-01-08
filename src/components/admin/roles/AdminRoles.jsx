@@ -1,62 +1,87 @@
 import { useEffect, useState } from "react";
-import api from "../../../api/axiosInstance";
 import { Link } from "react-router-dom";
+import useApi from "../../../api/hooks/useApi";
+import { ROLE_ROUTES } from "../../../api/routes/role.routes";
+import { errorToast } from "../../../utils/tost";
+import Table from "../../../components/common/Table";
+import { useNavigate } from "react-router-dom";
 
 function AdminRoles() {
+    const navigate = useNavigate();
     const [roles, setRoles] = useState([]);
 
+    const { data, loading, request: fetchRoles } = useApi(ROLE_ROUTES.LIST);
+
+    const { request: deleteRole } = useApi(null, { method: "DELETE" });
+
     useEffect(() => {
-        async function fetchRoles() {
-            try {
-                const res = await api.get("/admin/role/index");
-                console.log('Data', res.data.data);
-                setRoles(res.data.data || []);
-            } catch (error) {
-                console.error("Failed to fetch roles", error);
-            }
-        }
-        fetchRoles();
+        fetchRoles().then((res) => {
+            setRoles(res.data || []);
+        });
     }, []);
 
+    async function handleDelete(id) {
+        try {
+            await deleteRole(null, {
+                url: ROLE_ROUTES.DELETE(id),
+            });
+
+            setRoles((prev) => prev.filter((r) => r.id !== id));
+        } catch {
+            errorToast("Delete failed");
+        }
+    }
+
+    if (loading) return <p>Loading...</p>;
+
     return (
-        <div className="row">
-            <div className="col-12 grid-margin">
-                <div className="card">
-                    <div className="card-body">
-                        <h4 className="card-title">Admin Roles</h4>
-                        <div className="table-responsive">
-                            <Link to="add" className="btn btn-gradient-success btn-fw">Add</Link>
-                            <table className="table">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Designation</th>
-                                        <th>Status</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {roles.map((role, index) => (
-                                        <tr key={role.id}>
-                                            <td>{index + 1}</td>
-                                            <td>{role.designation}</td>
-                                            <td>{role.status === 1 ? <label class="badge badge-gradient-success">Active</label> : <label class="badge badge-gradient-danger">Inactive</label>}</td>
-                                            <td>
-                                                <Link
-                                                    to={`edit-role/${role.id}`}
-                                                    className="btn btn-gradient-primary btn-fw"
-                                                >
-                                                    Edit
-                                                </Link>
-                                                <button className="btn btn-gradient-danger btn-fw">Delete</button>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+        <div className="card">
+            <div className="card-body">
+                <h4>Admin Roles</h4>
+
+                <Link to="add" className="btn btn-success">
+                    Add
+                </Link>
+
+                <Table
+                    data={roles}
+                    columns={[
+                        {
+                            key: "designation",
+                            label: "Designationnnn",
+                        },
+                        {
+                            key: "status",
+                            label: "Status",
+                            render: (row) =>
+                                row.status === 1 ? (
+                                    <span className="badge badge-gradient-success">
+                                        Active
+                                    </span>
+                                ) : (
+                                    <span className="badge badge-gradient-danger">
+                                        Inactive
+                                    </span>
+                                ),
+                        },
+                    ]}
+                    actions={(row) => (
+                        <>
+                            <button
+                                className="btn btn-primary btn-fw"
+                                onClick={() => navigate(`edit-role/${row.id}`)}
+                            >
+                                Edit
+                            </button>
+                            <button
+                                className="btn btn-danger btn-fw"
+                                onClick={() => handleDelete(row.id)}
+                            >
+                                Delete
+                            </button>
+                        </>
+                    )}
+                />
             </div>
         </div>
     );
