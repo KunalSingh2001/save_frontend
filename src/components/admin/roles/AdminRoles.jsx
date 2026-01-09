@@ -10,15 +10,19 @@ function AdminRoles() {
     const navigate = useNavigate();
     const [roles, setRoles] = useState([]);
 
-    const { data, loading, request: fetchRoles } = useApi(ROLE_ROUTES.LIST);
+    const {
+        data,
+        loading,
+        error,
+        request: fetchRoles,
+    } = useApi(ROLE_ROUTES.LIST);
 
     const { request: deleteRole } = useApi(null, { method: "DELETE" });
 
     useEffect(() => {
-        fetchRoles().then((res) => {
-            setRoles(res.data || []);
-        });
+        fetchRoles();
     }, []);
+    console.log(data);
 
     async function handleDelete(id) {
         try {
@@ -44,7 +48,7 @@ function AdminRoles() {
                 </Link>
 
                 <Table
-                    data={roles}
+                    data={data?.data || []}
                     columns={[
                         {
                             key: "designation",
