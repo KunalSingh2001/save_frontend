@@ -1,34 +1,35 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import useApi from "../../../api/hooks/useApi";
-import { ROLE_ROUTES } from "../../../api/routes/role.routes";
+import { MENU_ROUTES } from "../../../api/routes/role.routes";
 import { errorToast } from "../../../utils/tost";
 import Table from "../../../components/common/Table";
 import { useNavigate } from "react-router-dom";
 
 function AdminRoles() {
     const navigate = useNavigate();
-    const [roles, setRoles] = useState([]);
 
     const {
         data,
         loading,
         error,
-        request: fetchRoles,
-    } = useApi(ROLE_ROUTES.LIST);
+        request: fetchMenus,
+    } = useApi(MENU_ROUTES.LIST);
 
-    const { request: deleteRole } = useApi(null, { method: "DELETE" });
+    const { request: deleteMenu } = useApi(null, { method: "DELETE" });
 
     useEffect(() => {
-        fetchRoles();
+        fetchMenus();
     }, []);
     console.log(data);
 
     async function handleDelete(id) {
         try {
-            await deleteRole(null, {
-                url: ROLE_ROUTES.DELETE(id),
+            await deleteMenu(null, {
+                url: MENU_ROUTES.DELETE(id),
             });
+
+            0;
         } catch {
             errorToast("Delete failed");
         }
@@ -39,7 +40,7 @@ function AdminRoles() {
     return (
         <div className="card">
             <div className="card-body">
-                <h4>Admin Roles</h4>
+                <h4>Admin Menus</h4>
 
                 <Link to="add" className="btn btn-success">
                     Add
@@ -71,7 +72,9 @@ function AdminRoles() {
                         <>
                             <button
                                 className="btn btn-primary btn-fw"
-                                onClick={() => navigate(`edit-role/${row.id}`)}
+                                onClick={() =>
+                                    navigate(`menu/update/${row.id}`)
+                                }
                             >
                                 Edit
                             </button>
