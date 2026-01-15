@@ -3,6 +3,7 @@ import AdminRoles from "../../components/admin/roles/AdminRoles";
 import AddEdit from "../../components/admin/roles/AddEdit";
 
 export default function AdminRolesRoutes() {
+    console.log("AdminRolesRoutes loaded");
     return (
         <Routes>
             <Route index element={<AdminRoles />} />

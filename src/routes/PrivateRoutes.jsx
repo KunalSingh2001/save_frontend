@@ -1,11 +1,11 @@
 import { Routes, Route } from "react-router-dom";
+import { lazy } from "react";
 import PrivateRoute from "../middlewares/PrivateRoute";
-import MainLayout from "../layouts/MainLayout";
-import Dashboard from "../layouts/Dashboard";
-import NotFound from "./NotFound";
-import AdminRolesRoutes from "./admin/adminRolesRoutes";
-import AdminManusRoutes from "./admin/AdminManusRoutes";
-
+const MainLayout = lazy(() => import("../layouts/MainLayout"));
+const NotFound = lazy(() => import("./NotFound"));
+const Dashboard = lazy(() => import("../layouts/Dashboard"));
+const AdminRolesRoutes = lazy(() => import("./admin/adminRolesRoutes"));
+const AdminManusRoutes = lazy(() => import("./admin/AdminManusRoutes"));
 export default function PrivateRoutes() {
     return (
         <PrivateRoute>
@@ -13,7 +13,10 @@ export default function PrivateRoutes() {
                 <Routes>
                     <Route path="/" index element={<Dashboard />} />
                     <Route path="roles/*" element={<AdminRolesRoutes />} />
-                    <Route path="manus/*" element={<AdminManusRoutes />} />
+                    <Route
+                        path="sidebar-menus/*"
+                        element={<AdminManusRoutes />}
+                    />
                     <Route path="*" element={<NotFound />} />
                 </Routes>
             </MainLayout>

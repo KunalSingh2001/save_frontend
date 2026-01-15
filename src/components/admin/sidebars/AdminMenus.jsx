@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import useApi from "../../../api/hooks/useApi";
-import { MENU_ROUTES } from "../../../api/routes/role.routes";
+import { MENU_ROUTES } from "../../../api/routes/menus.routes";
 import { errorToast } from "../../../utils/tost";
 import Table from "../../../components/common/Table";
 import { useNavigate } from "react-router-dom";
 
-function AdminRoles() {
+function AdminMenus() {
     const navigate = useNavigate();
 
     const {
@@ -50,8 +50,16 @@ function AdminRoles() {
                     data={data?.data || []}
                     columns={[
                         {
-                            key: "designation",
-                            label: "Designationnnn",
+                            key: "text",
+                            label: "Text",
+                        },
+                        {
+                            key: "url",
+                            label: "URL",
+                        },
+                        {
+                            key: "icon",
+                            label: "Icon",
                         },
                         {
                             key: "status",
@@ -92,4 +100,4 @@ function AdminRoles() {
     );
 }
 
-export default AdminRoles;
+export default AdminMenus;
