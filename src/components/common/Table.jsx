@@ -1,47 +1,56 @@
-function Table({ data = [], columns = [], actions }) {
+import ResponsivePagination from "react-responsive-pagination";
+import "react-responsive-pagination/themes/classic-light-dark.css";
+function Table({ data = [], columns = [], actions, pagination, onPageChange }) {
     return (
-        <div className="table-responsive">
-            <table className="table">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        {columns.map((col, index) => (
-                            <th key={index}>{col.label}</th>
-                        ))}
-                        {actions && <th>Actions</th>}
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {data.length === 0 ? (
+        <>
+            <div className="table-responsive">
+                <table className="table">
+                    <thead>
                         <tr>
-                            <td
-                                colSpan={columns.length + (actions ? 2 : 1)}
-                                className="text-center"
-                            >
-                                No data found
-                            </td>
+                            <th>#</th>
+                            {columns.map((col, index) => (
+                                <th key={index}>{col.label}</th>
+                            ))}
+                            {actions && <th>Actions</th>}
                         </tr>
-                    ) : (
-                        data.map((row, index) => (
-                            <tr key={row.id || index}>
-                                <td>{index + 1}</td>
+                    </thead>
 
-                                {columns.map((col, i) => (
-                                    <td key={i}>
-                                        {typeof col.render === "function"
-                                            ? col.render(row)
-                                            : row[col.key]}
-                                    </td>
-                                ))}
-
-                                {actions && <td>{actions(row)}</td>}
+                    <tbody>
+                        {data.length === 0 ? (
+                            <tr>
+                                <td
+                                    colSpan={columns.length + (actions ? 2 : 1)}
+                                    className="text-center"
+                                >
+                                    No data found
+                                </td>
                             </tr>
-                        ))
-                    )}
-                </tbody>
-            </table>
-        </div>
+                        ) : (
+                            data.map((row, index) => (
+                                <tr key={row.id || index}>
+                                    <td>{index + 1}</td>
+
+                                    {columns.map((col, i) => (
+                                        <td key={i}>
+                                            {typeof col.render === "function"
+                                                ? col.render(row)
+                                                : row[col.key]}
+                                        </td>
+                                    ))}
+
+                                    {actions && <td>{actions(row)}</td>}
+                                </tr>
+                            ))
+                        )}
+                    </tbody>
+                </table>
+            </div>
+            <ResponsivePagination
+                current={pagination?.page || 1}
+                total={pagination?.totalPages || 1}
+                onPageChange={onPageChange}
+            />
+        </>
     );
 }
 

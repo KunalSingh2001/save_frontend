@@ -6,12 +6,19 @@ import { useNavigate } from "react-router-dom";
 function AddEdit() {
     const { id } = useParams();
     const [name, setName] = useState("");
+    const [urlVal, setURL] = useState("");
+    const [icon, setIcon] = useState("");
+    const [isActive, setIsActive] = useState(false);
+    const [visibility, setVisibility] = useState(1);
     const navigate = useNavigate();
 
     function fetchMenuById() {
         api.get(`/admin/menu/get-by-id/${id}`)
             .then((res) => {
-                setName(res.data?.data?.designation);
+                const data = res.data?.data;
+                setName(data?.designation);
+                setURL(data?.url);
+                setIcon(data?.icon);
             })
             .catch((err) => {
                 console.log(err);
@@ -33,8 +40,14 @@ function AddEdit() {
                 msg = "Menu updated successfully";
             }
 
-            const res = await api.post(url, { designation: name });
-            console.log(res);
+            const data = {
+                text: name,
+                url: urlVal,
+                icon: icon,
+                status: isActive,
+                // visibility: visibility,
+            };
+            const res = await api.post(url, data);
             if (res.status === 201 || res.status === 200) {
                 navigate("/sidebar-menus");
                 successToast(res?.data?.message);
@@ -76,8 +89,8 @@ function AddEdit() {
                                     className="form-control"
                                     placeholder="Name"
                                     name="name"
-                                    value={name}
-                                    onChange={(e) => setName(e.target.value)}
+                                    value={urlVal}
+                                    onChange={(e) => setURL(e.target.value)}
                                     autoComplete="off"
                                 />
                             </div>

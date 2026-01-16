@@ -8,7 +8,8 @@ import { useNavigate } from "react-router-dom";
 
 function AdminMenus() {
     const navigate = useNavigate();
-
+    const [page, setPage] = useState(1);
+    const limit = 10;
     const {
         data,
         loading,
@@ -19,9 +20,13 @@ function AdminMenus() {
     const { request: deleteMenu } = useApi(null, { method: "DELETE" });
 
     useEffect(() => {
-        fetchMenus();
-    }, []);
-    console.log(data);
+        fetchMenus(null, {
+            params: {
+                page,
+                limit,
+            },
+        });
+    }, [page]);
 
     async function handleDelete(id) {
         try {
@@ -36,6 +41,10 @@ function AdminMenus() {
     }
 
     if (loading) return <p>Loading...</p>;
+
+    const onPageChange = (page) => {
+        setPage(page);
+    };
 
     return (
         <div className="card">
@@ -94,6 +103,8 @@ function AdminMenus() {
                             </button>
                         </>
                     )}
+                    pagination={data?.pagination}
+                    onPageChange={onPageChange}
                 />
             </div>
         </div>
