@@ -1,48 +1,39 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import useApi from "../../../api/hooks/useApi";
-import { MENU_ROUTES } from "../../../api/routes/menus.routes";
-import { errorToast, successToast } from "../../../utils/tost";
+import { ADMIN_ROUTES } from "../../../api/routes/admin.routes";
+import { successToast } from "../../../utils/tost";
 import Table from "../../../components/common/Table";
 import { useNavigate } from "react-router-dom";
 
-function AdminMenus() {
+function AdminAdmins() {
+    console.log("ADMIN_ROUTES:");
     const navigate = useNavigate();
     const [page, setPage] = useState(1);
-    const limit = 10;
-    const {
-        data,
-        loading,
-        error,
-        request: fetchMenus,
-    } = useApi(MENU_ROUTES.LIST);
 
-    const { request: deleteMenu } = useApi(null, { method: "DELETE" });
+    const { data, loading, request: fetchAdmins } = useApi(ADMIN_ROUTES.LIST);
+
+    const { request: deleteAdmin } = useApi(null, { method: "DELETE" });
 
     useEffect(() => {
-        fetchMenus(null, {
-            params: {
-                page,
-                limit,
-            },
-        });
+        fetchAdmins();
     }, [page]);
 
     async function handleDelete(id) {
         try {
-            const deleteResponse = await deleteMenu(null, {
-                url: MENU_ROUTES.DELETE(id),
+            const deleteResponse = await deleteAdmin(null, {
+                url: ADMIN_ROUTES.DELETE(id),
             });
 
-            fetchMenus(null, {
-                params: {
-                    page,
-                    limit,
-                },
-            });
+            if (data?.length === 1 && page > 1) {
+                setPage((prev) => prev - 1);
+            } else {
+                fetchAdmins();
+            }
+
             successToast(deleteResponse?.message);
         } catch {
-            errorToast("Delete failed");
+            // errorToast("Delete failed");
         }
     }
 
@@ -55,7 +46,7 @@ function AdminMenus() {
     return (
         <div className="card">
             <div className="card-body">
-                <h4>Admin Menus</h4>
+                <h4>Admin Admins</h4>
 
                 <Link to="add" className="btn btn-success">
                     Add
@@ -65,16 +56,16 @@ function AdminMenus() {
                     data={data?.data || []}
                     columns={[
                         {
-                            key: "text",
-                            label: "Text",
+                            key: "name",
+                            label: "name",
                         },
                         {
-                            key: "url",
-                            label: "URL",
+                            key: "email",
+                            label: "email",
                         },
                         {
-                            key: "icon",
-                            label: "Icon",
+                            key: "phone",
+                            label: "phone",
                         },
                         {
                             key: "status",
@@ -95,7 +86,7 @@ function AdminMenus() {
                         <>
                             <button
                                 className="btn btn-primary btn-fw"
-                                onClick={() => navigate(`edit-menu/${row.id}`)}
+                                onClick={() => navigate(`edit-admin/${row.id}`)}
                             >
                                 Edit
                             </button>
@@ -115,4 +106,4 @@ function AdminMenus() {
     );
 }
 
-export default AdminMenus;
+export default AdminAdmins;

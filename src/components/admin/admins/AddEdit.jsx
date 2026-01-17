@@ -3,57 +3,81 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { successToast, errorToast } from "../../../utils/tost";
 import { useNavigate } from "react-router-dom";
+import useApi from "../../../api/hooks/useApi";
+import { ADMIN_ROUTES } from "../../../api/routes/admin.routes";
+
 function AddEdit() {
     const { id } = useParams();
     const [name, setName] = useState("");
-    const [urlVal, setURL] = useState("");
-    const [icon, setIcon] = useState("");
-    const [isActive, setIsActive] = useState(false);
-    const [visibility, setVisibility] = useState(1);
-    const navigate = useNavigate();
+    const [email, setEmail] = useState("");
+    const [phone, setPhone] = useState("");
+    const [password, setPassword] = useState("");
+    const [role_id, setRole] = useState("");
+    const [manus, setManus] = useState([]);
 
-    function fetchMenuById() {
-        api.get(`/admin/menu/get-by-id/${id}`)
+    const navigate = useNavigate();
+    function fetchAdminById() {
+        api.get(`/admin/sub-admin/get-by-id/${id}`)
             .then((res) => {
-                const data = res.data?.data;
-                setName(data?.text);
-                setURL(data?.url);
-                setIcon(data?.icon);
-                setIsActive(data?.status);
-                setVisibility(data?.is_submenu);
+                setName(res.data?.data?.name);
             })
             .catch((err) => {
                 console.log(err);
             });
     }
+
+    function fetchAllManus() {
+        api.get(ADMIN_ROUTES.fetchRolesMenus)
+            .then((res) => {
+                console.log(res.data);
+                // setManus(res.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
     useEffect(() => {
         if (id) {
-            fetchMenuById();
+            fetchAdminById();
         }
+        fetchAllManus();
     }, [id]);
+
+    const { request: addEditAdmin } = useApi(null, { method: "POST" });
+
     async function addEditFormSubmitHandler(e) {
         e.preventDefault();
         try {
-            let url = "/admin/menu/create";
-            let msg = "Menu added successfully";
+            let url = ADMIN_ROUTES.CREATE;
+            let msg = "Admin added successfully";
 
             if (id) {
-                url = `/admin/menu/update/${id}`;
-                msg = "Menu updated successfully";
+                url = ADMIN_ROUTES.UPDATE(id);
+                msg = "Admin updated successfully";
             }
-
-            const data = {
-                text: name,
-                url: urlVal,
-                icon: icon,
-                status: isActive,
-                // visibility: visibility,
+            const payload = {
+                name,
+                email,
+                phone,
+                password,
+                role_id,
             };
-            const res = await api.post(url, data);
-            if (res.status === 201 || res.status === 200) {
-                navigate("/sidebar-menus");
-                successToast(res?.data?.message);
-            }
+            const addEditResponse = await addEditAdmin(
+                {
+                    payload,
+                },
+                {
+                    url: url,
+                }
+            );
+
+            // const res = await api.post(url, { designation:name });
+            // console.log(res);
+            // if (res.status === 201 || res.status === 200) {
+            //     navigate('/sub-admins');
+            //     successToast(res?.data?.message);
+            // }
         } catch (error) {
             console.log(error);
         }
@@ -63,7 +87,7 @@ function AddEdit() {
             <div className="col-12 grid-margin stretch-card">
                 <div className="card">
                     <div className="card-body">
-                        <h4 className="card-title">Menu Form</h4>
+                        <h4 className="card-title">Sub Admin Form</h4>
                         <p className="card-description">
                             {" "}
                             {id ? "Edit Form" : "Add Form"}{" "}
@@ -85,56 +109,44 @@ function AddEdit() {
                                 />
                             </div>
                             <div className="form-group">
-                                <label for="exampleInputName1">URL</label>
+                                <label for="exampleInputEmail3">Email</label>
                                 <input
-                                    type="text"
+                                    type="email"
                                     className="form-control"
-                                    placeholder="Name"
-                                    name="name"
-                                    value={urlVal}
-                                    onChange={(e) => setURL(e.target.value)}
+                                    placeholder="Email"
+                                    name="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
                                     autoComplete="off"
                                 />
                             </div>
                             <div className="form-group">
-                                <label for="exampleInputName1">Icon</label>
+                                <label for="exampleInputPhone3">Phone</label>
                                 <input
-                                    type="text"
+                                    type="number"
                                     className="form-control"
-                                    placeholder="Icon"
-                                    name="icon"
-                                    value={icon}
-                                    onChange={(e) => setIcon(e.target.value)}
+                                    placeholder="Phone"
+                                    name="phone"
+                                    value={phone}
+                                    onChange={(e) => setPhone(e.target.value)}
                                     autoComplete="off"
                                 />
                             </div>
                             <div className="form-group">
-                                <label>
-                                    <input
-                                        type="checkbox"
-                                        checked={isActive === 1}
-                                        onChange={(e) =>
-                                            setIsActive(
-                                                e.target.checked ? 1 : 0
-                                            )
-                                        }
-                                    />{" "}
-                                    Active
+                                <label for="exampleInputPassword3">
+                                    Password
                                 </label>
-                            </div>
-                            <div className="form-group">
-                                <label>Visibility</label>
-                                <select
+                                <input
+                                    type="password"
                                     className="form-control"
-                                    name="visibility"
-                                    value={visibility}
+                                    placeholder="Password"
+                                    name="password"
+                                    value={password}
                                     onChange={(e) =>
-                                        setVisibility(Number(e.target.value))
+                                        setPassword(e.target.value)
                                     }
-                                >
-                                    <option value={1}>Show</option>
-                                    <option value={0}>Hide</option>
-                                </select>
+                                    autoComplete="off"
+                                />
                             </div>
 
                             <button

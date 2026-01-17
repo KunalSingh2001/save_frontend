@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import useApi from "../../../api/hooks/useApi";
 import { ROLE_ROUTES } from "../../../api/routes/role.routes";
-import { errorToast } from "../../../utils/tost";
+import { errorToast, successToast } from "../../../utils/tost";
 import Table from "../../../components/common/Table";
 import { useNavigate } from "react-router-dom";
 
 function AdminRoles() {
     const navigate = useNavigate();
-    const [roles, setRoles] = useState([]);
+    const [page, setPage] = useState(1);
 
     const {
         data,
@@ -21,20 +21,31 @@ function AdminRoles() {
 
     useEffect(() => {
         fetchRoles();
-    }, []);
-    console.log(data);
+    }, [page]);
 
     async function handleDelete(id) {
         try {
-            await deleteRole(null, {
+            const deleteResponse = await deleteRole(null, {
                 url: ROLE_ROUTES.DELETE(id),
             });
+
+            if (data?.length === 1 && page > 1) {
+                setPage((prev) => prev - 1);
+            } else {
+                fetchRoles();
+            }
+
+            successToast(deleteResponse?.message);
         } catch {
-            errorToast("Delete failed");
+            // errorToast("Delete failed");
         }
     }
 
     if (loading) return <p>Loading...</p>;
+
+    const onPageChange = (page) => {
+        setPage(page);
+    };
 
     return (
         <div className="card">
@@ -50,7 +61,7 @@ function AdminRoles() {
                     columns={[
                         {
                             key: "designation",
-                            label: "Designationnnn",
+                            label: "Designation",
                         },
                         {
                             key: "status",
@@ -83,6 +94,8 @@ function AdminRoles() {
                             </button>
                         </>
                     )}
+                    pagination={data?.pagination}
+                    onPageChange={onPageChange}
                 />
             </div>
         </div>

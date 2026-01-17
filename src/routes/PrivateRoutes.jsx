@@ -6,6 +6,7 @@ const NotFound = lazy(() => import("./NotFound"));
 const Dashboard = lazy(() => import("../layouts/Dashboard"));
 const AdminRolesRoutes = lazy(() => import("./admin/adminRolesRoutes"));
 const AdminManusRoutes = lazy(() => import("./admin/AdminManusRoutes"));
+const AdminAdminsRoutes = lazy(() => import("./admin/AdminAdminsRoutes"));
 export default function PrivateRoutes() {
     return (
         <PrivateRoute>
@@ -17,6 +18,7 @@ export default function PrivateRoutes() {
                         path="sidebar-menus/*"
                         element={<AdminManusRoutes />}
                     />
+                    <Route path="subadmin/*" element={<AdminManusRoutes />} />
                     <Route path="*" element={<NotFound />} />
                 </Routes>
             </MainLayout>

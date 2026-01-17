@@ -53,7 +53,7 @@ function Sidebar() {
                             </li>
 
                             <li className="nav-item">
-                                <Link to="/admins" className="nav-link">
+                                <Link to="/subadmin" className="nav-link">
                                     Admins
                                 </Link>
                             </li>

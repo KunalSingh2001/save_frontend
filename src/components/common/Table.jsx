@@ -45,11 +45,13 @@ function Table({ data = [], columns = [], actions, pagination, onPageChange }) {
                     </tbody>
                 </table>
             </div>
-            <ResponsivePagination
-                current={pagination?.page || 1}
-                total={pagination?.totalPages || 1}
-                onPageChange={onPageChange}
-            />
+            {pagination && pagination.totalPages > 1 && (
+                <ResponsivePagination
+                    current={pagination?.page || 1}
+                    total={pagination?.totalPages || 1}
+                    onPageChange={onPageChange}
+                />
+            )}
         </>
     );
 }
