@@ -1,161 +1,184 @@
 import api from "../../../api/axiosInstance";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { successToast, errorToast } from "../../../utils/tost";
-import { useNavigate } from "react-router-dom";
 import useApi from "../../../api/hooks/useApi";
 import { ADMIN_ROUTES } from "../../../api/routes/admin.routes";
 
 function AddEdit() {
     const { id } = useParams();
+    const navigate = useNavigate();
+
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
     const [password, setPassword] = useState("");
-    const [role_id, setRole] = useState("");
-    const [manus, setManus] = useState([]);
+    const [role, setRole] = useState("");
 
-    const navigate = useNavigate();
+    const [menus, setMenus] = useState([]);
+    const [openMenus, setOpenMenus] = useState([]);
+    const [selectedMenus, setSelectedMenus] = useState([]);
+
+    const [roles, setRoles] = useState([]);
+
+    /* ---------------- FETCH DATA ---------------- */
+
     function fetchAdminById() {
-        api.get(`/admin/sub-admin/get-by-id/${id}`)
-            .then((res) => {
-                setName(res.data?.data?.name);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+        api.get(`/admin/sub-admin/get-by-id/${id}`).then(res => {
+            const data = res.data?.data;
+            setName(data?.name || "");
+            setEmail(data?.email || "");
+            setPhone(data?.phone || "");
+            setRole(data?.role_id || "");
+            setSelectedMenus(data?.menus || []); // preselect menus (edit)
+        });
     }
 
-    function fetchAllManus() {
-        api.get(ADMIN_ROUTES.fetchRolesMenus)
-            .then((res) => {
-                console.log(res.data);
-                // setManus(res.data);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+    function fetchAllMenus() {
+        api.get(ADMIN_ROUTES.fetchRolesMenus).then(res => {
+            setRoles(res.data?.roles || []);
+            setMenus(res.data?.menus || []);
+        });
     }
 
     useEffect(() => {
-        if (id) {
-            fetchAdminById();
-        }
-        fetchAllManus();
+        if (id) fetchAdminById();
+        fetchAllMenus();
     }, [id]);
+
+    /* ---------------- TOGGLES ---------------- */
+
+    const toggleOpen = (id) => {
+        setOpenMenus(prev =>
+            prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
+        );
+    };
+
+    const toggleSelect = (id) => {
+        setSelectedMenus(prev =>
+            prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
+        );
+    };
+
+    /* ---------------- SUBMIT ---------------- */
 
     const { request: addEditAdmin } = useApi(null, { method: "POST" });
 
     async function addEditFormSubmitHandler(e) {
         e.preventDefault();
-        try {
-            let url = ADMIN_ROUTES.CREATE;
-            let msg = "Admin added successfully";
 
-            if (id) {
-                url = ADMIN_ROUTES.UPDATE(id);
-                msg = "Admin updated successfully";
-            }
-            const payload = {
-                name,
-                email,
-                phone,
-                password,
-                role_id,
-            };
-            const addEditResponse = await addEditAdmin(
-                {
-                    payload,
-                },
-                {
-                    url: url,
-                }
-            );
+        const payload = {
+            name,
+            email,
+            phone,
+            password,
+            role_id: role,
+            menus: selectedMenus, // IMPORTANT
+        };
 
-            // const res = await api.post(url, { designation:name });
-            // console.log(res);
-            // if (res.status === 201 || res.status === 200) {
-            //     navigate('/sub-admins');
-            //     successToast(res?.data?.message);
-            // }
-        } catch (error) {
-            console.log(error);
-        }
+        const url = id ? ADMIN_ROUTES.UPDATE(id) : ADMIN_ROUTES.CREATE;
+        await addEditAdmin({ payload }, { url });
+
+        navigate("/sub-admins");
     }
+
     return (
         <div className="row">
             <div className="col-12 grid-margin stretch-card">
                 <div className="card">
                     <div className="card-body">
                         <h4 className="card-title">Sub Admin Form</h4>
-                        <p className="card-description">
-                            {" "}
-                            {id ? "Edit Form" : "Add Form"}{" "}
-                        </p>
-                        <form
-                            className="forms-sample"
-                            onSubmit={addEditFormSubmitHandler}
-                        >
+
+                        <form className="forms-sample" onSubmit={addEditFormSubmitHandler}>
+
+                            {/* BASIC INFO */}
                             <div className="form-group">
-                                <label for="exampleInputName1">Name</label>
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    placeholder="Name"
-                                    name="name"
+                                <label>Name</label>
+                                <input className="form-control"
                                     value={name}
-                                    onChange={(e) => setName(e.target.value)}
-                                    autoComplete="off"
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label for="exampleInputEmail3">Email</label>
-                                <input
-                                    type="email"
-                                    className="form-control"
-                                    placeholder="Email"
-                                    name="email"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    autoComplete="off"
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label for="exampleInputPhone3">Phone</label>
-                                <input
-                                    type="number"
-                                    className="form-control"
-                                    placeholder="Phone"
-                                    name="phone"
-                                    value={phone}
-                                    onChange={(e) => setPhone(e.target.value)}
-                                    autoComplete="off"
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label for="exampleInputPassword3">
-                                    Password
-                                </label>
-                                <input
-                                    type="password"
-                                    className="form-control"
-                                    placeholder="Password"
-                                    name="password"
-                                    value={password}
-                                    onChange={(e) =>
-                                        setPassword(e.target.value)
-                                    }
-                                    autoComplete="off"
-                                />
+                                    onChange={(e) => setName(e.target.value)} />
                             </div>
 
-                            <button
-                                type="submit"
-                                className="btn btn-gradient-primary me-2"
-                            >
+                            <div className="form-group">
+                                <label>Email</label>
+                                <input className="form-control"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)} />
+                            </div>
+
+                            <div className="form-group">
+                                <label>Phone</label>
+                                <input className="form-control"
+                                    value={phone}
+                                    onChange={(e) => setPhone(e.target.value)} />
+                            </div>
+
+                            <div className="form-group">
+                                <label>Password</label>
+                                <input type="password" className="form-control"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)} />
+                            </div>
+
+                            {/* ROLE */}
+                            <div className="form-group">
+                                <label>Role</label>
+                                <select className="form-select"
+                                    value={role}
+                                    onChange={(e) => setRole(e.target.value)}>
+                                    <option value="">Select Role</option>
+                                    {roles.map(r => (
+                                        <option key={r.id} value={r.id}>
+                                            {r.designation}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            {/* MENU ACCESS */}
+                            <div className="form-group">
+                                <label>Menu Access</label>
+                                <div className="border p-3 rounded">
+
+                                    {menus.map(menu => {
+                                        const isOpen = openMenus.includes(menu.id);
+
+                                        return (
+                                            <div key={menu.id} className="mb-2">
+                                                <div
+                                                    style={{ cursor: "pointer", fontWeight: 600 }}
+                                                    onClick={() => toggleOpen(menu.id)}
+                                                >
+                                                    {isOpen ? "▼" : "▶"} {menu.text}
+                                                </div>
+
+                                                {isOpen && menu.children?.map(child => (
+                                                    <div key={child.id}
+                                                        className="form-check ms-4 mt-1">
+                                                        <input
+                                                            type="checkbox"
+                                                            className="form-check-input"
+                                                            checked={selectedMenus.includes(child.id)}
+                                                            onChange={() => toggleSelect(child.id)}
+                                                        />
+                                                        <label className="form-check-label">
+                                                            {child.text}
+                                                        </label>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        );
+                                    })}
+
+                                </div>
+                            </div>
+
+                            <button type="submit" className="btn btn-gradient-primary me-2">
                                 Submit
                             </button>
-                            <button className="btn btn-light">Cancel</button>
+                            <button type="button" className="btn btn-light">
+                                Cancel
+                            </button>
+
                         </form>
                     </div>
                 </div>
@@ -163,4 +186,5 @@ function AddEdit() {
         </div>
     );
 }
+
 export default AddEdit;
