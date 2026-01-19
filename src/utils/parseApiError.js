@@ -15,12 +15,10 @@ export const parseApiError = (error) => {
     }
 
     if (data?.message && data.message !== "Validation failed") {
-        console.log("enter 1");
         return data.message;
     }
 
     if (error.message) {
-        console.log("enter 2");
         return error.message;
     }
 

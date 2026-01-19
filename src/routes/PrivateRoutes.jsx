@@ -18,7 +18,7 @@ export default function PrivateRoutes() {
                         path="sidebar-menus/*"
                         element={<AdminManusRoutes />}
                     />
-                    <Route path="subadmin/*" element={<AdminManusRoutes />} />
+                    <Route path="subadmin/*" element={<AdminAdminsRoutes />} />
                     <Route path="*" element={<NotFound />} />
                 </Routes>
             </MainLayout>

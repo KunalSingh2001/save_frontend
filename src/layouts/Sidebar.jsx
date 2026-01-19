@@ -24,10 +24,10 @@ function Sidebar() {
                     </a>
                 </li>
                 <li className="nav-item">
-                    <a className="nav-link" href="index.html">
+                    <Link className="nav-link" to="/">
                         <span className="menu-title">Dashboard</span>
                         <i className="mdi mdi-home menu-icon"></i>
-                    </a>
+                    </Link>
                 </li>
                 <li className="nav-item">
                     {/* TOGGLE ONLY (no routing here) */}
