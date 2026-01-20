@@ -30,21 +30,19 @@ function Sidebar() {
                     </Link>
                 </li>
                 <li className="nav-item">
-                    {/* TOGGLE ONLY (no routing here) */}
                     <a
                         className="nav-link"
                         data-bs-toggle="collapse"
-                        href="#ui-basic"
+                        href="#admins-menu"
                         aria-expanded="false"
-                        aria-controls="ui-basic"
+                        aria-controls="admins-menu"
                     >
                         <span className="menu-title">Admins</span>
                         <i className="menu-arrow"></i>
                         <i className="mdi mdi-crosshairs-gps menu-icon"></i>
                     </a>
 
-                    {/* SUB MENU */}
-                    <div className="collapse" id="ui-basic">
+                    <div className="collapse" id="admins-menu">
                         <ul className="nav flex-column sub-menu">
                             <li className="nav-item">
                                 <Link to="/roles" className="nav-link">
@@ -61,6 +59,29 @@ function Sidebar() {
                             <li className="nav-item">
                                 <Link to="/sidebar-menus" className="nav-link">
                                     Sidebar Menus
+                                </Link>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li className="nav-item">
+                    <a
+                        className="nav-link"
+                        data-bs-toggle="collapse"
+                        href="#blogs-menu"
+                        aria-expanded="false"
+                        aria-controls="blogs-menu"
+                    >
+                        <span className="menu-title">Blogs</span>
+                        <i className="menu-arrow"></i>
+                        <i className="mdi mdi-crosshairs-gps menu-icon"></i>
+                    </a>
+
+                    <div className="collapse" id="blogs-menu">
+                        <ul className="nav flex-column sub-menu">
+                            <li className="nav-item">
+                                <Link to="/blog" className="nav-link">
+                                    Blogs
                                 </Link>
                             </li>
                         </ul>

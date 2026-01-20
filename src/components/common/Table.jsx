@@ -1,6 +1,7 @@
 import ResponsivePagination from "react-responsive-pagination";
 import "react-responsive-pagination/themes/classic-light-dark.css";
 function Table({ data = [], columns = [], actions, pagination, onPageChange }) {
+    console.log("col", data, columns);
     return (
         <>
             <div className="table-responsive">

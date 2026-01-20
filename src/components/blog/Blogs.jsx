@@ -1,53 +1,54 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import useApi from "../../../api/hooks/useApi";
-import { ADMIN_ROUTES } from "../../../api/routes/admin.routes";
-import { successToast } from "../../../utils/tost";
-import Table from "../../../components/common/Table";
+import useApi from "../../api/hooks/useApi";
+import { BLOG_ROUTES } from "../../api/routes/blog.routes";
+import { successToast } from "../../utils/tost";
+import Table from "../../components/common/Table";
 import { useNavigate } from "react-router-dom";
 
-function AdminAdmins() {
+function Blogs() {
     const navigate = useNavigate();
     const [page, setPage] = useState(1);
 
-    const { data, loading, request: fetchAdmins } = useApi(ADMIN_ROUTES.LIST);
+    const { data, loading, request: fetchBlogs } = useApi(BLOG_ROUTES.LIST);
+    const { request: deleteBlog } = useApi(null, { method: "DELETE" });
+    console.log("blog data", data);
+    // const { request: activeDeavtiveBlog } = useApi(null, { method: "POST" });
 
-    const { request: deleteAdmin } = useApi(null, { method: "DELETE" });
-    const { request: activeDeavtiveAdmin } = useApi(null, { method: "POST" });
     useEffect(() => {
-        fetchAdmins();
+        fetchBlogs();
     }, [page]);
 
-    async function handleActiveDeactive(id) {
-        try {
-            const payload = {
-                field: "is_active",
-                value:
-                    data.data.find((admin) => admin.id === id)?.is_active === 1
-                        ? 0
-                        : 1,
-            };
-            console.log("payload", payload);
-            const activeResponse = await activeDeavtiveAdmin(payload, {
-                url: ADMIN_ROUTES.ActiveStatus(id),
-            });
-            fetchAdmins();
-            successToast(activeResponse?.message);
-        } catch {
-            // errorToast("Delete failed");
-        }
-    }
+    // async function handleActiveDeactive(id) {
+    //     try {
+    //         const payload = {
+    //             field: "is_active",
+    //             value:
+    //                 data.data.find((admin) => admin.id === id)?.is_active === 1
+    //                     ? 0
+    //                     : 1,
+    //         };
+    //         console.log("payload", payload);
+    //         const activeResponse = await activeDeavtiveAdmin(payload, {
+    //             url: ADMIN_ROUTES.ActiveStatus(id),
+    //         });
+    //         fetchAdmins();
+    //         successToast(activeResponse?.message);
+    //     } catch {
+    //         // errorToast("Delete failed");
+    //     }
+    // }
 
     async function handleDelete(id) {
         try {
-            const deleteResponse = await deleteAdmin(null, {
-                url: ADMIN_ROUTES.DELETE(id),
+            const deleteResponse = await deleteBlog(null, {
+                url: BLOG_ROUTES.DELETE(id),
             });
 
             if (data?.length === 1 && page > 1) {
                 setPage((prev) => prev - 1);
             } else {
-                fetchAdmins();
+                fetchBlogs();
             }
 
             successToast(deleteResponse?.message);
@@ -64,7 +65,7 @@ function AdminAdmins() {
     return (
         <div className="card">
             <div className="card-body">
-                <h4>Admin Admins</h4>
+                <h4>Blogs</h4>
 
                 <Link to="add" className="btn btn-success">
                     Add
@@ -74,16 +75,40 @@ function AdminAdmins() {
                     data={data?.data || []}
                     columns={[
                         {
-                            key: "name",
-                            label: "name",
+                            key: "image",
+                            label: "Image",
                         },
                         {
-                            key: "email",
-                            label: "email",
+                            key: "category",
+                            label: "Category",
                         },
                         {
-                            key: "phone",
-                            label: "phone",
+                            key: "title",
+                            label: "Title",
+                        },
+                        {
+                            key: "post",
+                            label: "Post",
+                        },
+                        {
+                            key: "is_recent",
+                            label: "Recent",
+                        },
+                        {
+                            key: "is_published",
+                            label: "Published",
+                        },
+                        {
+                            key: "is_published",
+                            label: "Published",
+                        },
+                        {
+                            key: "status",
+                            label: "Added",
+                        },
+                        {
+                            key: "blog_author.name",
+                            label: "Author",
                         },
                         {
                             key: "status",
@@ -104,7 +129,7 @@ function AdminAdmins() {
                         <>
                             <button
                                 className="btn btn-primary btn-fw"
-                                onClick={() => navigate(`edit-admin/${row.id}`)}
+                                onClick={() => navigate(`edit-blog/${row.id}`)}
                             >
                                 Edit
                             </button>
@@ -114,13 +139,13 @@ function AdminAdmins() {
                             >
                                 Delete
                             </button>
-                            <button
+                            {/* <button
                                 // btn btn-inverse-success btn-fw
                                 className={`btn btn-${row.is_active === 1 ? "inverse-danger" : "inverse-success"} btn-fw`}
                                 onClick={() => handleActiveDeactive(row.id)}
                             >
                                 {row.is_active === 1 ? "InActive" : "Active"}
-                            </button>
+                            </button> */}
                         </>
                     )}
                     pagination={data?.pagination}
@@ -131,4 +156,4 @@ function AdminAdmins() {
     );
 }
 
-export default AdminAdmins;
+export default Blogs;

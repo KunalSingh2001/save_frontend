@@ -7,17 +7,14 @@ import { successToast } from "../../../utils/tost";
 function AddEdit() {
     const { id } = useParams();
     const navigate = useNavigate();
-
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
     const [password, setPassword] = useState("");
     const [role, setRole] = useState("");
-
     const [menus, setMenus] = useState([]);
     const [openMenus, setOpenMenus] = useState([]);
     const [selectedMenus, setSelectedMenus] = useState([]);
-
     const [roles, setRoles] = useState([]);
 
     /* ---------------- FETCH DATA ---------------- */
@@ -34,7 +31,6 @@ function AddEdit() {
                     ? data.permissions.access_ids.split(",").map(Number)
                     : [],
             );
-            console.log("testing for menu data", selectedMenus);
         });
     }
 
@@ -95,8 +91,7 @@ function AddEdit() {
         };
         const url = id ? ADMIN_ROUTES.UPDATE(id) : ADMIN_ROUTES.CREATE;
         const res = await addEditAdmin(payload, { url });
-        console.log("success message", res?.data?.message);
-        successToast(res?.data?.message);
+        successToast(res?.message);
         navigate("/subadmin");
     }
 

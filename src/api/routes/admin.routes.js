@@ -4,4 +4,5 @@ export const ADMIN_ROUTES = {
     CREATE: "/admin/sub-admin/create",
     UPDATE: (id) => `/admin/sub-admin/update/${id}`,
     fetchRolesMenus: "/admin/sub-admin/fetch-role-menu",
+    ActiveStatus: (id) => `/admin/sub-admin/key/update/${id}`,
 };
